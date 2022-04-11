@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::resource('/news', App\Http\Controllers\NewsController::class);
 Route::get('task1', [App\Http\Controllers\NewsController::class, 'getData']);
+Route::get('curse', [App\Http\Controllers\NewsController::class, 'getCurse']);
+Route::get('weather', [App\Http\Controllers\NewsController::class, 'getWeather']);
 Route::get('/', function () {
     return view('welcome');
 });

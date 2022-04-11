@@ -51,7 +51,10 @@
 
 <script>
     $('button').on('click', function() {
-        $.get('http://127.0.0.1:8000/weather', function(data){
+        $.get('http://127.0.0.1:8002/task1', function(data){
+            console.log(data);
         });
     });
+
+
 </script>

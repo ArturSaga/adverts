@@ -157,14 +157,14 @@ class NewsController extends Controller
         $data = json_decode(curl_exec($ch));
         // Закрываем запрос
         curl_close($ch);
-        return $data;
+        return (array)$data;
     }
 
     public function getData()
     {
         $result = [
             'curse' => $this->getCurse(),
-            'weather' => (array)$this->getWeather()
+            'weather' => $this->getWeather()
         ];
         return view('task1', ['data' => $result]);
     }
