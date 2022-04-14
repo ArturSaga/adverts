@@ -1,0 +1,31 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito);
+table {
+  width: 800px;
+}
+
+div.scroll-table {
+  width: 90%;
+  overflow: auto;
+  height: 800px;
+}
+
+#map {
+  position: absolute;
+  top: 130px;
+  right: 100px;
+}
+
+li {
+  color: #1a202c;
+  font-size: 18px;
+}
+
+div ul li {
+  line-height: 1.5;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
