@@ -10,7 +10,7 @@
                 <h2>Редактировать данные пользователя</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('admin.users') }}"> Назад </a>
+                <a class="btn btn-primary" href="/admin/users"> Назад </a>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.users.update',$user->id) }}" method="POST">
+    <form action="{{ route('users.update',$user->id) }}" method="POST">
         @csrf
 
         @method('PUT')

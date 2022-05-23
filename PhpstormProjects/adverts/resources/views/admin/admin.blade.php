@@ -4,7 +4,7 @@
             <x-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
                 Объявления
             </x-nav-link>
-            <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
+            <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                 Список пользователей
             </x-nav-link>
         </div>
@@ -25,12 +25,7 @@
         </tr>
         @foreach ($adverts as $advert)
             <tr>
-                <td>
-                    @php
-                        $name = App\Models\User::get()->where('id', $advert->user_id)->first();
-                        echo $name->name;
-                    @endphp
-                </td>
+                <td>{{ $advert->user->name }}</td>
                 <td>{{ $advert->subcategory }}</td>
                 <td>{{ $advert->title }}</td>
                 <td>{{ $advert->description }}</td>

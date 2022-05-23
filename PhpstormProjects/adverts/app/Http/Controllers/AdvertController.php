@@ -14,56 +14,55 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $adverts=Advert::all();
-
-        return view('adverts.index', compact('adverts'));
+        $user = User::get()->where('id', Auth::id())->first();
+        if ($user) {
+            if ($user->role == 'Blocked') {
+                return view('adverts.blocked');
+            } elseif ($user->role === 'Admin' or 'User') {
+                if ($request->all == 'all' or '') {
+                    $adverts = Advert::all();
+                } else {
+                    $adverts = Advert::get()->where('category', $request->all);
+                }
+                return view('adverts.index', ['adverts' => $adverts]);
+            }
+        } elseif ($user == null) {
+            if ($request->all == 'all') {
+                $adverts = Advert::all();
+            } else {
+                $adverts = Advert::get()->where('category', $request->all);
+            }
+            return view('adverts.index', ['adverts' => $adverts]);
+        }
     }
 
-    public function indexClothis()
-    {
-        $adverts=Advert::get()->where('category', 'Clothis');
-        return view('adverts.clothis', compact('adverts'));
-    }
-
-    public function indexAuto()
-    {
-        $adverts=Advert::get()->where('category', 'Auto');
-        return view('adverts.auto', compact('adverts'));
-    }
-
-    public function indexHome()
-    {
-        $adverts=Advert::get()->where('category', 'Home');
-        return view('adverts.home', compact('adverts'));
-    }
-
-    public function indexSport()
-    {
-        $adverts=Advert::get()->where('category', 'Sport');
-        return view('adverts.sport', compact('adverts'));
-    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function create(Advert $adverts)
+    public function create()
     {
-        $adverts=Advert::all();
-        return view('adverts.create', compact('adverts'));
+        return view('adverts.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Advert $advert)
+    public function store(Request $request)
     {
 //        Advert::create($request->all());
+        $request->validate([
+            'category' => ['required'],
+            'subcategory' => ['required'],
+            'title' => ['required'],
+            'description' => ['required'],
+        ]);
 
         $advert = new Advert();
         $advert->user_id = Auth::id();
@@ -74,61 +73,63 @@ class AdvertController extends Controller
         $advert->save();
 
 
-        return redirect()->route('adverts.index')->with('success', 'Объявление успешно доавблено');
+        return redirect('/adverts/category/all')->with('success', 'Объявление успешно добавлено');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Advert  $advert
+     * @param \App\Models\Advert $advert
      * @return \Illuminate\Http\Response
      */
     public function show(Advert $advert)
     {
-        return view('adverts.show', compact('advert'));
+        return view('adverts.show', ['advert' => $advert]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Advert  $advert
+     * @param \App\Models\Advert $advert
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Advert $advert)
     {
-        return view('adverts.edit', compact('advert'));
+        return view('adverts.create', ['advert' => $advert]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Advert  $advert
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Advert $advert
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Advert $advert)
     {
-//        $advert->update($request->all());
-
-        $advert->category = $request->category;
-        $advert->subcategory = $request->subcategory;
-        $advert->title = $request->title;
+        $request->validate([
+            'category' => ['required'],
+            'subcategory' => ['required'],
+            'title' => ['required'],
+            'description' => ['required'],
+        ]);
+        $advert->update($request->all());
         $advert->description = $request->description;
         $advert->save();
 
-        return redirect()->route('adverts.index')->with('success', 'Объявление успешно обновлено');
+        return redirect('/admin')->with('success', 'Объявление успешно обновлено');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Advert  $advert
+     * @param \App\Models\Advert $advert
      * @return \Illuminate\Http\Response
      */
     public function destroy(Advert $advert)
     {
         $advert->delete();
 
-        return redirect()->route('adverts.index')->with('success', 'Объявление успешно удалено');
+        return redirect('/admin')->with('success', 'Объявление успешно удалено');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
@@ -15,25 +16,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('adverts.all');
+    return redirect('/adverts/category/all');
 });
 
-Route::get('/adverts/all', [AdvertController::class, 'index'])->name('adverts.all');
-Route::get('/adverts/clothis', [AdvertController::class, 'indexClothis'])->name('adverts.clothis');
-Route::get('/adverts/home', [AdvertController::class, 'indexHome'])->name('adverts.home');
-Route::get('/adverts/auto', [AdvertController::class, 'indexAuto'])->name('adverts.auto');
-Route::get('/adverts/sport', [AdvertController::class, 'indexSport'])->name('adverts.sport');
-
+Route::get('/adverts/category/{all}', [AdvertController::class, 'index'])->name('adverts.all');
+Route::get('/adverts', function () {
+    return redirect('/adverts/category/all');
+});
 Route::resource('/adverts', AdvertController::class)->middleware(['auth']);
 
-Route::get('/admin', [AdminController::class, 'getAdverts'])->name('admin');
-Route::get('/admin/users', [AdminController::class, 'getUsers'])->name('admin.users');
-Route::get('/admin/users/{user}/edit', [AdminController::class, 'editUsers'])->name('admin.users.edit');
-Route::delete('/admin/users/{user}', [AdminController::class, 'destroyUsers'])->name('admin.users.destroy');
-Route::put('/admin/users/{user}', [AdminController::class,'updateUsers'])->name('admin.users.update');
+Route::prefix('/admin')->group(function () {
+    Route::get('/', [AdminController::class, 'getAdverts'])->name('admin');
+    Route::resource('users', AdminController::class)->middleware(['auth']);
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

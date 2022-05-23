@@ -4,7 +4,7 @@
             <x-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
                 Объявления
             </x-nav-link>
-            <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
+            <x-nav-link :href="route('users.index')" :active="request()->routeIs('admin.users')">
                 Список пользователей
             </x-nav-link>
         </div>
@@ -32,8 +32,8 @@
                 <td>{{$user->role}}</td>
                 <td>
 {{--                    <a class="btn btn-info" href="{{ route('adverts.show',$advert->id) }}">Show</a>--}}
-                    <a class="btn btn-primary" href="{{ route('admin.users.edit',$user->id) }}">Редактировать</a>
-                    <form action="{{ route('admin.users.destroy',$user->id) }}" method="POST">
+                    <a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Редактировать</a>
+                    <form action="{{ route('users.destroy',$user->id) }}" method="POST">
 
                         @csrf
                         @method('DELETE')
