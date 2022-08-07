@@ -20,8 +20,8 @@ class AdvertController extends Controller
         if ($user) {
             if ($user->role == 'Blocked') {
                 return view('adverts.blocked');
-            } elseif ($user->role === 'Admin' or 'User') {
-                if ($request->all == 'all' or '') {
+            } elseif ($user->role === 'Admin' or $user->role === 'User') {
+                if ($request->all == 'all' or $request->all == '') {
                     $adverts = Advert::all();
                 } else {
                     $adverts = Advert::get()->where('category', $request->all);
